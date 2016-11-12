@@ -155,6 +155,8 @@ public class ImpressionistView extends View {
         _paint.setColor(currColor);
         _paint.setAlpha(150);
 
+        Random rand = new Random();
+
         switch(motionEvent.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 if(_velocityTracker == null) {
@@ -179,13 +181,30 @@ public class ImpressionistView extends View {
                         _offScreenCanvas.drawLine(x-5,y-5,x+5,y+5,_paint);
                         break;
                     case CircleSplatter:
-                        Random rand = new Random();
                         _offScreenCanvas.drawCircle(x,y,25,_paint);
                         for (int i = 0; i < 10; i++){
                             int xRand = rand.nextInt(50 + 1 -(-50) + -50);
                             int yRand = rand.nextInt(50 + 1 -(-50) + -50);
                             int radius = rand.nextInt(50);
                             _offScreenCanvas.drawCircle(x+xRand,y+yRand, radius,_paint);
+
+                        }
+                        break;
+                    case LineSplatter:
+                        for (int i = 0; i < 50; i++){
+                            int xRand = rand.nextInt(50 + 1 -(-50) + -50);
+                            int yRand = rand.nextInt(50 + 1 -(-50) + -50);
+                            int xRand2 = rand.nextInt(50 + 1 -(-50) + -50);
+                            int yRand2 = rand.nextInt(50 + 1 -(-50) + -50);
+                            _offScreenCanvas.drawLine(x+xRand,y+yRand, x-xRand2,y-yRand2,_paint);
+
+                        }
+                        break;
+                    case Bow:
+                        for (int i = 0; i < 50; i++){
+                            int xRand = rand.nextInt(50 + 1 -(-50) + -50);
+                            int yRand = rand.nextInt(50 + 1 -(-50) + -50);
+                            _offScreenCanvas.drawLine(x+xRand,y+yRand, x-xRand,y-yRand,_paint);
 
                         }
                         break;
@@ -215,7 +234,6 @@ public class ImpressionistView extends View {
                         _offScreenCanvas.drawLine(x-yWidth,y+xWidth,x+yWidth,y-xWidth,_paint);
                         break;
                     case CircleSplatter:
-                        Random rand = new Random();
                         float radius = (float)speed*.01f;
                         _offScreenCanvas.drawCircle(x,y,radius,_paint);
                         for (int i = 0; i < 10; i++){
@@ -228,6 +246,26 @@ public class ImpressionistView extends View {
                                 rRand = rand.nextInt((int)radius);
                             }
                             _offScreenCanvas.drawCircle(x+xRand,y+yRand, rRand,_paint);
+
+                        }
+                        break;
+                    case LineSplatter:
+                        float regionSize = (float)speed*.02f;
+                        for (int i = 0; i < 50; i++){
+                            int xRand = rand.nextInt((int)(regionSize + 1 -(-regionSize) + -regionSize));
+                            int yRand = rand.nextInt((int)(regionSize + 1 -(-regionSize) + -regionSize));
+                            int xRand2 = rand.nextInt((int)(regionSize + 1 -(-regionSize) + -regionSize));
+                            int yRand2 = rand.nextInt((int)(regionSize + 1 -(-regionSize) + -regionSize));
+                            _offScreenCanvas.drawLine(x+xRand,y+yRand, x-xRand2,y-yRand2,_paint);
+
+                        }
+                        break;
+                    case Bow:
+                        float size = (float)speed*.02f;
+                        for (int i = 0; i < 50; i++){
+                            int xRand = rand.nextInt((int)(size + 1 -(-size) + -size));
+                            int yRand = rand.nextInt((int)(size + 1 -(-size) + -size));
+                            _offScreenCanvas.drawLine(x+xRand,y+yRand, x-xRand,y-yRand,_paint);
 
                         }
                         break;

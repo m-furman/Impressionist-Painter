@@ -8,5 +8,6 @@ public enum BrushType {
     Square,
     Line,
     CircleSplatter,
-    LineSplatter
+    LineSplatter,
+    Bow
 }

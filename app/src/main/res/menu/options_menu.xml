@@ -6,4 +6,9 @@
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_save"
         />
+    <item android:id="@+id/share"
+        android:title="Share painting"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_share"
+        />
 </menu>

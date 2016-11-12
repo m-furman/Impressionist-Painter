@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.util.Log;
@@ -113,6 +114,10 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
             case R.id.menuLineSplatter:
                 Toast.makeText(this, "Line Splatter Brush", Toast.LENGTH_SHORT).show();
                 _impressionistView.setBrushType(BrushType.LineSplatter);
+                return true;
+            case R.id.menuBow:
+                Toast.makeText(this, "Bow Brush", Toast.LENGTH_SHORT).show();
+                _impressionistView.setBrushType(BrushType.Bow);
                 return true;
         }
         return false;
@@ -220,8 +225,48 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
             case R.id.save_image:
                 createSaveDialog();
                 return true;
+            case R.id.share:
+                saveToCacheAndShare();
+                return true;
         }
         return false;
+    }
+
+    /* Saves bitmap to cache directory rather than SD card before sharing.
+       Since the user didn't explicitly ask to save this image on the device,
+       there is no reason to request read and write external storage permissions
+       for this action.
+       See: http://stackoverflow.com/questions/9049143/android-share-intent-for-a-bitmap-is-it-possible-not-to-save-it-prior-sharing
+    */
+    public void saveToCacheAndShare() {
+        try {
+
+            File cachePath = new File(getCacheDir(), "images");
+            cachePath.mkdirs(); // don't forget to make the directory
+            FileOutputStream stream = new FileOutputStream(cachePath + "/image.png"); // overwrites this image every time
+            _impressionistView.getBitmap().compress(Bitmap.CompressFormat.PNG, 100, stream);
+            stream.close();
+            shareImage();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void shareImage() {
+        File imagePath = new File(getCacheDir(), "images");
+        File newFile = new File(imagePath, "image.png");
+        Uri contentUri = FileProvider.getUriForFile(this, "com.example.myapp.fileprovider", newFile);
+
+        if (contentUri != null) {
+            Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // temp permission for receiving app to read this file
+            shareIntent.setType("image/png");
+            shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
+            startActivity(Intent.createChooser(shareIntent, "Choose an app"));
+        }
     }
 
     public void createSaveDialog() {
