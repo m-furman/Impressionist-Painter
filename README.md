@@ -8,4 +8,7 @@ Human-Computer Interaction) at the University of Maryland.
 
 ## Online sources:
 
+Used this stackoverflow page to help with the implementation of the sharing functionality:
+http://stackoverflow.com/questions/9049143/android-share-intent-for-a-bitmap-is-it-possible-not-to-save-it-prior-sharing
+
 //TODO
