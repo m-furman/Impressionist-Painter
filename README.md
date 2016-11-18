@@ -2,7 +2,9 @@
 A simple app which allows the user to create an impressionist painting out of their favorite photo. Created for CMSC434 (Introduction to 
 Human-Computer Interaction) at the University of Maryland.
 
-//TODO: Put in screenshots
+<p align = "center">
+<img src="http://drive.google.com/uc?export=view&id=0B687BEjGtgFVMkFCdzk2OHBFM0k" />
+</p>
 
 ## How to run the program:
 
