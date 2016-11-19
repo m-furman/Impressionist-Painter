@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -32,7 +31,6 @@ public class ImpressionistView extends View {
     private Canvas _offScreenCanvas = null;
     private Bitmap _offScreenBitmap = null;
     private Paint _paint = new Paint();
-    private Path _path = new Path();
 
     private int _alpha = 100;
     private int _defaultRadius = 25;
@@ -42,6 +40,7 @@ public class ImpressionistView extends View {
     private Paint _paintBorder = new Paint();
     private BrushType _brushType = BrushType.Square;
     private float _minBrushRadius = 5;
+    private boolean isColorInverted = false;
 
     public ImpressionistView(Context context) {
         super(context);
@@ -116,7 +115,6 @@ public class ImpressionistView extends View {
      * Clears the painting
      */
     public void clearPainting(){
-        //TODO
         _offScreenBitmap.recycle();
         _offScreenBitmap = getDrawingCache().copy(Bitmap.Config.ARGB_8888, true);
         _offScreenCanvas = new Canvas(_offScreenBitmap);
@@ -128,17 +126,29 @@ public class ImpressionistView extends View {
         super.onDraw(canvas);
 
         if(_offScreenBitmap != null) {
-            canvas.drawBitmap(_offScreenBitmap, 0, 0, _paint);
+            canvas.drawBitmap(_offScreenBitmap, 0, 0, null);
         }
 
         // Draw the border. Helpful to see the size of the bitmap in the ImageView
         canvas.drawRect(getBitmapPositionInsideImageView(_imageView), _paintBorder);
     }
 
+    /**
+     * Ensures that any future strokes use the inverted color rather than the original.
+     */
+    public void invertColor() {
+        isColorInverted = true;
+    }
+
+    /**
+     * Reverts the brush to its original color that's gotten from the image.
+     */
+    public void revertColor() {
+        isColorInverted = false;
+    }
     @Override
     public boolean onTouchEvent(MotionEvent motionEvent){
 
-        //TODO
         //Basically, the way this works is to liste for Touch Down and Touch Move events and determine where those
         //touch locations correspond to the bitmap in the ImageView. You can then grab info about the bitmap--like the pixel color--
         //at that location
@@ -151,7 +161,12 @@ public class ImpressionistView extends View {
                 || y > imageViewBitmap.getHeight() || y < 0) {
             return false;
         }
+
         int currColor = imageViewBitmap.getPixel((int)x,(int)y);
+        if (isColorInverted) {
+            int color = currColor;
+            currColor = (color & 0xFF000000) | (~color & 0x00FFFFFF);
+        }
         _paint.setColor(currColor);
         _paint.setAlpha(150);
 
@@ -278,6 +293,7 @@ public class ImpressionistView extends View {
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
                 // Return a VelocityTracker object back to be re-used by others.
+                // Uncommenting this causes a crash..?
                 //_velocityTracker.recycle();
                 break;
         }

@@ -20,6 +20,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.PopupMenu.OnMenuItemClickListener;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import java.io.File;
@@ -64,6 +66,9 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
         ImageView imageView = (ImageView) findViewById(R.id.viewImage);
         _impressionistView.setImageView(imageView);
 
+        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
+        radioGroup.check(R.id.buttonRevert);
+
     }
 
     @Override
@@ -91,6 +96,20 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
         popupMenu.setOnMenuItemClickListener(this);
         popupMenu.inflate(R.menu.popup_menu);
         popupMenu.show();
+    }
+
+    public void onRadioButtonChecked(View view) {
+        boolean checked = ((RadioButton)view).isChecked();
+        switch(view.getId()) {
+            case R.id.buttonInvert:
+                if (checked)
+                    _impressionistView.invertColor();
+                    break;
+            case R.id.buttonRevert:
+                if (checked)
+                    _impressionistView.revertColor();
+                    break;
+        }
     }
 
     public boolean onMenuItemClick(MenuItem item) {
@@ -197,6 +216,7 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
      * @param resultCode
      * @param data
      */
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

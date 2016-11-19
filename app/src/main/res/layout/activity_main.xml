@@ -66,13 +66,29 @@
                 android:text="Brush"
                 android:id="@+id/buttonBrush"
                 android:onClick="onButtonClickSetBrush"/>
-
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Clear"
                 android:id="@+id/buttonClear"
                 android:onClick="onButtonClickClear"/>
+            <RadioGroup android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/radioGroup">
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Regular brush color"
+                    android:id="@+id/buttonRevert"
+                    android:onClick ="onRadioButtonChecked"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Inverted brush color"
+                    android:id="@+id/buttonInvert"
+                    android:onClick ="onRadioButtonChecked"/>
+            </RadioGroup>
 
 
         </LinearLayout>
