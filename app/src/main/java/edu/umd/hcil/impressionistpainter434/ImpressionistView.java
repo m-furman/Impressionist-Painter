@@ -112,12 +112,13 @@ public class ImpressionistView extends View {
     }
 
     /**
-     * Clears the painting
+     * Clears the painting.
      */
     public void clearPainting(){
-        _offScreenBitmap.recycle();
-        _offScreenBitmap = getDrawingCache().copy(Bitmap.Config.ARGB_8888, true);
-        _offScreenCanvas = new Canvas(_offScreenBitmap);
+        Paint paint = new Paint();
+        paint.setColor(Color.WHITE);
+        paint.setStyle(Paint.Style.FILL);
+        _offScreenCanvas.drawRect(0, 0, this.getWidth(), this.getHeight(), paint);
         invalidate();
     }
 
@@ -156,9 +157,9 @@ public class ImpressionistView extends View {
         float x = motionEvent.getX();
         float y = motionEvent.getY();
         Bitmap imageViewBitmap = _imageView.getDrawingCache();
-
-        if (imageViewBitmap == null || x > imageViewBitmap.getWidth() || x < 0
-                || y > imageViewBitmap.getHeight() || y < 0) {
+        Rect bitmapPositionInImageView = getBitmapPositionInsideImageView(_imageView);
+        if (imageViewBitmap == null || x < bitmapPositionInImageView.left || x > bitmapPositionInImageView.right
+                || y > bitmapPositionInImageView.bottom || y < bitmapPositionInImageView.top) {
             return false;
         }
 

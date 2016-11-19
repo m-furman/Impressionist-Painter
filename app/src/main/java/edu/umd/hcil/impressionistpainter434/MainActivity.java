@@ -69,6 +69,21 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
         RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         radioGroup.check(R.id.buttonRevert);
 
+        _impressionistView.revertColor();
+
+    }
+
+    /**
+     * Necessary so that Instant Run from Android Studio selects correct color pallete
+     * for brush.
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        RadioButton invert = (RadioButton) findViewById(R.id.buttonInvert);
+        if (invert.isChecked()){
+            _impressionistView.invertColor();
+        }
     }
 
     @Override
