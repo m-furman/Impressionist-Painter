@@ -23,6 +23,9 @@ http://stackoverflow.com/questions/649154/save-bitmap-to-location
 Used this stackoverflow page to assist with the use of the VelocityTracker:
 http://stackoverflow.com/questions/5815975/get-speed-of-a-ontouch-action-move-event-in-android
 
+Used this page from stackoverflow to assist with color inversion for a brush:
+http://stackoverflow.com/questions/34910789/invert-a-hexadecimal-color-in-android
+
 Used this page from Android Developers in order to help me figure out how to draw to a canvas:
 https://developer.android.com/guide/topics/graphics/2d-graphics.html
 
@@ -32,3 +35,9 @@ https://developer.android.com/reference/android/graphics/Bitmap.html
 Used the following two Android Developers pages to help me figure out how to track the velocity of motion events:
 https://developer.android.com/reference/android/view/VelocityTracker.html
 https://developer.android.com/training/gestures/movement.html
+
+Used the following Android Developers page to help with various radio button issues:
+https://developer.android.com/guide/topics/ui/controls/radiobutton.html
+
+
+
