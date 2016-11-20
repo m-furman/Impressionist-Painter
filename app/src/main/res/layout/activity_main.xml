@@ -45,21 +45,6 @@
             android:layout_alignParentTop="true"
             android:orientation="horizontal"
             android:layout_weight="0.1">
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Download Images"
-                android:id="@+id/buttonDownloadImages"
-                android:onClick="onButtonClickDownloadImages"/>
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Load Image"
-                android:id="@+id/buttonLoadImage"
-                android:onClick="onButtonClickLoadImage"/>
-
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

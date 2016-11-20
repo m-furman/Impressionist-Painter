@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
 
     /**
      * Necessary so that Instant Run from Android Studio selects correct color pallete
-     * for brush.
+     * for the brush.
      */
     @Override
     public void onResume() {
@@ -162,9 +162,8 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
      * Downloads test images to use in the assignment. Feel free to use any images you want. I only made this
      * as an easy way to get images onto the emulator.
      *
-     * @param v
      */
-    public void onButtonClickDownloadImages(View v) {
+    public void onButtonClickDownloadImages() {
 
         // Without this call, the app was crashing in the onActivityResult method when trying to read from file system
         FileUtils.verifyStoragePermissions(this);
@@ -210,9 +209,8 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
     /**
      * Loads an image from the Gallery into the ImageView
      *
-     * @param v
      */
-    public void onButtonClickLoadImage(View v) {
+    public void onButtonClickLoadImage() {
 
         // Without this call, the app was crashing in the onActivityResult method when trying to read from file system
         FileUtils.verifyStoragePermissions(this);
@@ -247,6 +245,7 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
                 imageView.destroyDrawingCache();
                 imageView.setImageBitmap(bitmap);
                 imageView.setDrawingCacheEnabled(true);
+                _impressionistView.clearPainting();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -262,6 +261,12 @@ public class MainActivity extends AppCompatActivity implements OnMenuItemClickLi
                 return true;
             case R.id.share:
                 saveToCacheAndShare();
+                return true;
+            case R.id.download_images:
+                onButtonClickDownloadImages();
+                return true;
+            case R.id.load_image:
+                onButtonClickLoadImage();
                 return true;
         }
         return false;

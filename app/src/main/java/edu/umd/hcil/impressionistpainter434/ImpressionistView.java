@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
@@ -33,13 +32,8 @@ public class ImpressionistView extends View {
     private Paint _paint = new Paint();
 
     private int _alpha = 100;
-    private int _defaultRadius = 25;
-    private Point _lastPoint = null;
-    private long _lastPointTime = -1;
-    private boolean _useMotionSpeedForBrushStrokeSize = true;
     private Paint _paintBorder = new Paint();
-    private BrushType _brushType = BrushType.Square;
-    private float _minBrushRadius = 5;
+    private BrushType _brushType = BrushType.Circle;
     private boolean isColorInverted = false;
 
     public ImpressionistView(Context context) {
@@ -142,7 +136,7 @@ public class ImpressionistView extends View {
     }
 
     /**
-     * Reverts the brush to its original color that's gotten from the image.
+     * Reverts the brush to its original color.
      */
     public void revertColor() {
         isColorInverted = false;
@@ -150,7 +144,7 @@ public class ImpressionistView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent motionEvent){
 
-        //Basically, the way this works is to liste for Touch Down and Touch Move events and determine where those
+        //Basically, the way this works is to listen for Touch Down and Touch Move events and determine where those
         //touch locations correspond to the bitmap in the ImageView. You can then grab info about the bitmap--like the pixel color--
         //at that location
 
@@ -158,19 +152,21 @@ public class ImpressionistView extends View {
         float y = motionEvent.getY();
         Bitmap imageViewBitmap = _imageView.getDrawingCache();
         Rect bitmapPositionInImageView = getBitmapPositionInsideImageView(_imageView);
+        // Don't allow the user to draw out of bounds.
         if (imageViewBitmap == null || x < bitmapPositionInImageView.left || x > bitmapPositionInImageView.right
                 || y > bitmapPositionInImageView.bottom || y < bitmapPositionInImageView.top) {
             return false;
         }
 
         int currColor = imageViewBitmap.getPixel((int)x,(int)y);
-        if (isColorInverted) {
+        if (isColorInverted) { // invert the color if the 'inverted brush color' toggle button is checked
             int color = currColor;
             currColor = (color & 0xFF000000) | (~color & 0x00FFFFFF);
         }
         _paint.setColor(currColor);
         _paint.setAlpha(150);
 
+        // Used for the generation of circle splatter and line splatter brush strokes.
         Random rand = new Random();
 
         switch(motionEvent.getAction()) {
@@ -194,7 +190,7 @@ public class ImpressionistView extends View {
                         break;
                     case Line:
                         _paint.setStrokeWidth(6);
-                        _offScreenCanvas.drawLine(x-5,y-5,x+5,y+5,_paint);
+                        _offScreenCanvas.drawLine(x-35,y-35,x+35,y+35,_paint);
                         break;
                     case CircleSplatter:
                         _offScreenCanvas.drawCircle(x,y,25,_paint);
@@ -231,6 +227,7 @@ public class ImpressionistView extends View {
                 return true;
             case MotionEvent.ACTION_MOVE:
                 _velocityTracker.addMovement(motionEvent);
+                // If velocity is greater than 5,000 it defaults to 5,000.
                 _velocityTracker.computeCurrentVelocity(1000,5000);
                 float xVelocity = _velocityTracker.getXVelocity();
                 float yVelocity = _velocityTracker.getYVelocity();
@@ -250,7 +247,7 @@ public class ImpressionistView extends View {
                         _offScreenCanvas.drawLine(x-yWidth,y+xWidth,x+yWidth,y-xWidth,_paint);
                         break;
                     case CircleSplatter:
-                        float radius = (float)speed*.01f;
+                        float radius = (float)speed*.01f; //max radius for any randomly generated circles
                         _offScreenCanvas.drawCircle(x,y,radius,_paint);
                         for (int i = 0; i < 10; i++){
                             int xRand = rand.nextInt((int)(radius + 1 -(-radius) + -radius));
@@ -266,7 +263,7 @@ public class ImpressionistView extends View {
                         }
                         break;
                     case LineSplatter:
-                        float regionSize = (float)speed*.02f;
+                        float regionSize = (float)speed*.02f; //the dimensions of the region where the lines will be generated
                         for (int i = 0; i < 50; i++){
                             int xRand = rand.nextInt((int)(regionSize + 1 -(-regionSize) + -regionSize));
                             int yRand = rand.nextInt((int)(regionSize + 1 -(-regionSize) + -regionSize));
@@ -293,9 +290,7 @@ public class ImpressionistView extends View {
                 return true;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
-                // Return a VelocityTracker object back to be re-used by others.
-                // Uncommenting this causes a crash..?
-                //_velocityTracker.recycle();
+                _velocityTracker.clear();
                 break;
         }
 
